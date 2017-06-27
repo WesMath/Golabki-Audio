@@ -6,7 +6,25 @@ from gtts import gTTS
 
 #tts = gTTS(text='Your computer needs more DAVID STRINGA', lang='en')
 #tts.save("hello123.mp3")
+desiredTracks = []
+
+def addRemove(some_function):
+    print("addRemove was called")
+    if some_function in desiredTracks:
+        desiredTracks.remove(some_function)
+    else:
+        desiredTracks.append(some_function)
+    return
+
+def makeAllSound():
+    print("makeAllSound was called")
+    for fn in desiredTracks:
+        print("fn about to be called")
+        fn()
+    return
+
 def googNews():
+    print("googNews was called")#TODO relocate global button GUI updating
     key = open('news_api.txt', 'r')
     with urllib.request.urlopen("https://newsapi.org/v1/articles?source=google-news&sortBy=top&apiKey="+key.read()) as url:
         data = json.loads(url.read().decode())
@@ -22,11 +40,18 @@ def googNews():
 win = tk.Tk() # 2
 win.title("Personal Sandbox") # 3
 
-action1 = ttk.Button(win, text="Click Me!", command=googNews) # 7
+action1 = ttk.Button(win, text="Generate Audio", command=makeAllSound) # 7
 action1.grid(column=0, row=0, padx=20, pady=10)
 
 #webbrowser.open("futureReminders.txt") #Opens in OS's default .txt editor (Notepad)
 
+num_of_choices = 1
+checkInt = [] #This array will store all of our checkbox flags- no sense in creating individual variables
+for i in range(num_of_choices):
+    checkInt.append(tk.IntVar())
+newsCheck = tk.Checkbutton(win, text="Google News", variable=checkInt[0], command=lambda: addRemove(googNews)) #Without the lambda, python evaluates the expression and stores the result in command instead of executing it as a callback
+newsCheck.select()
+newsCheck.grid(column=0, row=1, sticky=tk.W)
 
 def _quit(): # 7
     win.quit()
