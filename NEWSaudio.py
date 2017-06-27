@@ -14,3 +14,4 @@ def googNews():
             output += ". Article Number " + str(i + 1) + ". " + data['articles'][i]['title']
         newsClip = gTTS(text=output, lang='en')
         newsClip.save("daNews.mp3")
+    return
